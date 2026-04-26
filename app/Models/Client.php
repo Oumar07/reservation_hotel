@@ -4,20 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Hotel extends Model
+class Client extends Model
 {
     //
     protected $fillable = [
-        'nom',
-        'localisation',
-        'pays',
-        'description',
-        'image'
+    'nom',
+    'email',
+    'mot_de_passe',
+    'telephone'
     ];
 
-    public function rooms()
+    public function bookings()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(Booking::class);
     }
 
     public function reviews()
