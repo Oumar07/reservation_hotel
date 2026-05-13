@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Hotel;
+use Illuminate\Support\Facades\Schema;
 
 class HotelController extends Controller
 {
@@ -11,8 +13,59 @@ class HotelController extends Controller
      */
     public function index()
     {
-        $hotels = \App\Models\Hotel::all();
-        return view('hotels.index', compact('hotels'));
+        if (! Schema::hasTable('hotels')) {
+            $hotels = collect();
+            $countries = collect();
+
+            return view('hotels.index', compact('hotels', 'countries'));
+        }
+
+        $query = Hotel::with(['rooms', 'reviews']);
+
+        if (request('destination')) {
+            $destination = request('destination');
+            $query->where(function ($builder) use ($destination) {
+                $builder->where('localisation', 'like', "%{$destination}%")
+                    ->orWhere('pays', 'like', "%{$destination}%")
+                    ->orWhere('nom', 'like', "%{$destination}%");
+            });
+        }
+
+        if (request('country')) {
+            $query->where('pays', request('country'));
+        }
+
+        if (request('room_type')) {
+            $query->whereHas('rooms', function ($builder) {
+                $builder->where('type', request('room_type'));
+            });
+        }
+
+        if (request('guests')) {
+            $query->whereHas('rooms', function ($builder) {
+                $builder->where('capacite', '>=', request('guests'));
+            });
+        }
+
+        if (request('max_price')) {
+            $query->whereHas('rooms', function ($builder) {
+                $builder->where('prix', '<=', request('max_price'));
+            });
+        }
+
+        $hotels = $query->get();
+
+        if (request('rating')) {
+            $hotels = $hotels->filter(function ($hotel) {
+                $rating = round($hotel->reviews->avg('note') ?: (4.4 + (($hotel->id % 6) / 10)), 1);
+
+                return $rating >= (int) request('rating');
+            });
+        }
+
+        $countries = Hotel::query()->select('pays')->distinct()->orderBy('pays')->pluck('pays');
+
+        return view('hotels.index', compact('hotels', 'countries'));
     }
     /**
      * Show the form for creating a new resource.
@@ -31,6 +84,10 @@ class HotelController extends Controller
         //
         \App\Models\Hotel::create($request->all());
 
+        if ($request->input('redirect_to') === 'admin') {
+            return redirect('/admin');
+        }
+
         return redirect()->route('hotels.index');
     }
 
@@ -39,7 +96,9 @@ class HotelController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $hotel = Hotel::with(['rooms', 'reviews'])->findOrFail($id);
+
+        return view('hotels.show', compact('hotel'));
     }
 
     /**

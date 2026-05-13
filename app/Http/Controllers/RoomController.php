@@ -31,8 +31,25 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        \App\Models\Room::create($request->all());
+        $request->validate([
+            'hotel_id' => 'required|exists:hotels,id',
+            'type' => 'required|in:simple,double,suite',
+            'prix' => 'required|numeric|min:0',
+            'capacite' => 'required|integer|min:1',
+            'image' => 'nullable|url',
+        ]);
+
+        \App\Models\Room::create($request->only([
+            'hotel_id',
+            'type',
+            'prix',
+            'capacite',
+            'image',
+        ]));
+
+        if ($request->input('redirect_to') === 'admin') {
+            return redirect('/admin?tab=rooms')->with('success', 'Chambre ajoutée avec succès');
+        }
 
         return redirect()->route('rooms.index');
     }
