@@ -349,6 +349,10 @@
         @apply w-full max-w-lg animate-fade-up rounded-2xl bg-white p-6 shadow-2xl sm:p-8;
     }
 
+    .modal-input {
+        @apply form-input;
+    }
+
     /* ——— Tables ——— */
     .data-table {
         @apply w-full min-w-[720px] text-left;

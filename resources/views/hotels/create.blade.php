@@ -1,15 +1,29 @@
 @extends('layouts.app')
 
-@section('content')
-<main class="mx-auto max-w-xl px-6 py-10">
-    <h1 class="mb-6 text-3xl font-semibold">Créer un hôtel</h1>
+@section('title', 'Créer un hôtel — StayHub')
 
-    <form method="POST" action="{{ route('hotels.store') }}" class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
-        @csrf
-        <input type="text" name="nom" placeholder="Nom" class="w-full rounded-xl border border-slate-200 p-3">
-        <input type="text" name="localisation" placeholder="Ville" class="w-full rounded-xl border border-slate-200 p-3">
-        <input type="text" name="pays" placeholder="Pays" class="w-full rounded-xl border border-slate-200 p-3">
-        <button type="submit" class="w-full rounded-xl bg-blue-600 px-5 py-3 font-medium text-white">Créer</button>
-    </form>
+@section('content')
+<main class="page-container section-padding">
+    <div class="mx-auto max-w-xl reveal">
+        <h1 class="section-title">Créer un hôtel</h1>
+        <p class="section-subtitle">Ajoutez un nouvel établissement à la plateforme.</p>
+
+        <form method="POST" action="{{ route('hotels.store') }}" class="card mt-8 space-y-5 p-6 sm:p-8">
+            @csrf
+            <label class="block">
+                <span class="form-label">Nom</span>
+                <input type="text" name="nom" placeholder="Nom de l'hôtel" required class="form-input">
+            </label>
+            <label class="block">
+                <span class="form-label">Ville</span>
+                <input type="text" name="localisation" placeholder="Ville" required class="form-input">
+            </label>
+            <label class="block">
+                <span class="form-label">Pays</span>
+                <input type="text" name="pays" placeholder="Pays" required class="form-input">
+            </label>
+            <button type="submit" class="btn-primary w-full">Créer</button>
+        </form>
+    </div>
 </main>
 @endsection

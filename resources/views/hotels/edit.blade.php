@@ -1,18 +1,32 @@
 @extends('layouts.app')
 
+@section('title', 'Modifier l\'hôtel — StayHub')
+
 @section('content')
-<main class="mx-auto max-w-xl px-6 py-10">
-    <h1 class="mb-6 text-3xl font-semibold">Modifier l'hôtel</h1>
+<main class="page-container section-padding">
+    <div class="mx-auto max-w-xl reveal">
+        <h1 class="section-title">Modifier l'hôtel</h1>
+        <p class="section-subtitle">{{ $hotel->nom }}</p>
 
-    <form method="POST" action="{{ route('hotels.update', $hotel->id) }}" class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
-        @csrf
-        @method('PUT')
+        <form method="POST" action="{{ route('hotels.update', $hotel->id) }}" class="card mt-8 space-y-5 p-6 sm:p-8">
+            @csrf
+            @method('PUT')
 
-        <input type="text" name="nom" value="{{ $hotel->nom }}" class="w-full rounded-xl border border-slate-200 p-3">
-        <input type="text" name="localisation" value="{{ $hotel->localisation }}" class="w-full rounded-xl border border-slate-200 p-3">
-        <input type="text" name="pays" value="{{ $hotel->pays }}" class="w-full rounded-xl border border-slate-200 p-3">
+            <label class="block">
+                <span class="form-label">Nom</span>
+                <input type="text" name="nom" value="{{ $hotel->nom }}" required class="form-input">
+            </label>
+            <label class="block">
+                <span class="form-label">Ville</span>
+                <input type="text" name="localisation" value="{{ $hotel->localisation }}" required class="form-input">
+            </label>
+            <label class="block">
+                <span class="form-label">Pays</span>
+                <input type="text" name="pays" value="{{ $hotel->pays }}" required class="form-input">
+            </label>
 
-        <button class="w-full rounded-xl bg-blue-600 px-5 py-3 font-medium text-white">Enregistrer les modifications</button>
-    </form>
+            <button type="submit" class="btn-primary w-full">Enregistrer les modifications</button>
+        </form>
+    </div>
 </main>
 @endsection

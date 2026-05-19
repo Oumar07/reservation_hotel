@@ -1,69 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StayHub</title>
+    <meta name="description" content="StayHub — Réservez des hôtels et resorts d'exception partout dans le monde.">
+    <title>@yield('title', 'StayHub — Réservation hôtelière premium')</title>
+
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=cormorant-garamond:500,600,700|dm-sans:400,500,600,700" rel="stylesheet">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('head')
 </head>
-<body class="bg-slate-50 font-sans text-slate-950 antialiased">
-    <nav class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
-        <div class="mx-auto flex max-w-[1540px] items-center justify-between">
-            <a href="/hotels" class="flex items-center gap-3">
-                <span class="grid h-11 w-11 place-items-center rounded-full bg-blue-600 text-white">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16" />
-                        <path d="M9 21v-6h6v6" />
-                        <path d="M8 7h.01M12 7h.01M16 7h.01M8 11h.01M12 11h.01M16 11h.01" />
-                    </svg>
-                </span>
-                <span class="text-2xl font-semibold tracking-normal">StayHub</span>
-            </a>
+<body class="flex min-h-screen flex-col">
+    @include('partials.navbar')
 
-            <div class="flex items-center gap-5 text-sm font-medium sm:text-base">
-                <a href="/hotels" class="nav-link {{ request()->is('hotels*') ? 'is-active' : '' }}">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16" />
-                        <path d="M9 21v-6h6v6" />
-                        <path d="M8 7h.01M12 7h.01M16 7h.01M8 11h.01M12 11h.01M16 11h.01" />
-                    </svg>
-                    Hôtels
-                </a>
-                <a href="/bookings" class="nav-link {{ request()->is('bookings') ? 'is-active' : '' }}">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M20 21a8 8 0 0 0-16 0" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
-                    Mes réservations
-                </a>
-                <a href="/admin" class="nav-link">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
-                    </svg>
-                    Administration
-                </a>
-            </div>
-        </div>
-    </nav>
+    <main class="flex-1 @yield('main-class', 'pt-0')">
+        @yield('content')
+    </main>
 
-    @yield('content')
+    @hasSection('hide-footer')
+    @else
+        @include('partials.footer')
+    @endif
 
-    <style>
-        .nav-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            border-radius: 0.8rem;
-            padding: 0.7rem 0.95rem;
-            color: rgb(15 23 42);
-            transition: 150ms ease;
-        }
-
-        .nav-link:hover,
-        .nav-link.is-active {
-            background: rgb(37 99 235);
-            color: white;
-        }
-    </style>
+    @stack('scripts')
 </body>
 </html>

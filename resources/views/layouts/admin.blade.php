@@ -1,54 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
-    <title>Tableau de bord admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Administration — StayHub')</title>
+
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=cormorant-garamond:500,600,700|dm-sans:400,500,600,700" rel="stylesheet">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-slate-50 font-sans text-slate-950 antialiased">
-
-    <nav class="border-b border-slate-200 bg-white px-6 py-5">
-        <div class="mx-auto flex max-w-[1540px] items-center justify-between">
+<body class="flex min-h-screen flex-col bg-surface">
+    <header class="site-nav is-scrolled border-b border-navy-900/5 bg-white/95 shadow-sm backdrop-blur-xl" data-site-nav>
+        <div class="page-container flex items-center justify-between py-4 lg:py-5">
             <a href="/admin" class="flex items-center gap-3">
-                <span class="grid h-11 w-11 place-items-center rounded-full bg-blue-600 text-white">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16" />
-                        <path d="M9 21v-6h6v6" />
-                        <path d="M8 7h.01M12 7h.01M16 7h.01M8 11h.01M12 11h.01M16 11h.01" />
-                    </svg>
-                </span>
-                <span class="text-3xl font-semibold tracking-normal text-slate-950">StayHub</span>
-            </a>
-
-            <div class="flex items-center gap-7 text-base font-medium">
-                <a href="/hotels" class="flex items-center gap-2 text-slate-900 transition hover:text-blue-600">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16" />
-                        <path d="M9 21v-6h6v6" />
-                        <path d="M8 7h.01M12 7h.01M16 7h.01M8 11h.01M12 11h.01M16 11h.01" />
-                    </svg>
-                    Hôtels
-                </a>
-                <a href="/bookings" class="flex items-center gap-2 text-slate-900 transition hover:text-blue-600">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M20 21a8 8 0 0 0-16 0" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
-                    Mes réservations
-                </a>
-                <a href="/admin" class="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-white shadow-sm transition hover:bg-blue-700">
+                <span class="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-navy-900 to-navy-700 text-gold-400 shadow-md">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
                     </svg>
-                    Administration
-                </a>
-            </div>
-        </div>
-    </nav>
+                </span>
+                <span class="font-display text-2xl font-semibold text-navy-900">StayHub <span class="text-sm font-sans font-medium text-muted">Admin</span></span>
+            </a>
 
-    <main>
+            <nav class="hidden items-center gap-1 sm:flex" aria-label="Navigation admin">
+                <a href="/hotels" class="nav-link-item">Hôtels</a>
+                <a href="/bookings" class="nav-link-item">Réservations</a>
+                <a href="/admin" class="nav-link-item is-active">Tableau de bord</a>
+            </nav>
+
+            <a href="/hotels" class="btn-outline hidden sm:inline-flex">Voir le site</a>
+        </div>
+    </header>
+
+    <main class="flex-1">
         @yield('content')
     </main>
 
+    @stack('scripts')
 </body>
 </html>

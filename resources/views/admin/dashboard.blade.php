@@ -19,15 +19,16 @@
     ];
 @endphp
 
-<div class="mx-auto max-w-[1540px] px-6 py-10 sm:px-10 lg:px-16">
-    <div class="mb-10">
-        <h1 class="text-4xl font-semibold tracking-normal text-slate-950">Tableau de bord admin</h1>
-        <p class="mt-3 text-lg font-normal text-slate-500">Gérez votre activité hôtelière</p>
+<div class="page-container section-padding">
+    <div class="reveal mb-10">
+        <p class="text-sm font-semibold uppercase tracking-widest text-gold-600">Administration</p>
+        <h1 class="section-title mt-2">Tableau de bord</h1>
+        <p class="section-subtitle">Gérez votre activité hôtelière</p>
     </div>
 
     <div class="mb-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         <div class="stat-card">
-            <span class="stat-icon text-emerald-500">
+            <span class="stat-icon-wrap text-emerald-600">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M12 2v20" />
                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6" />
@@ -40,7 +41,7 @@
         </div>
 
         <div class="stat-card">
-            <span class="stat-icon text-blue-500">
+            <span class="stat-icon-wrap text-navy-600">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M8 2v4M16 2v4M3 10h18" />
                     <rect x="3" y="4" width="18" height="18" rx="2" />
@@ -54,7 +55,7 @@
         </div>
 
         <div class="stat-card">
-            <span class="stat-icon text-amber-500">
+            <span class="stat-icon-wrap text-gold-600">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M3 17l6-6 4 4 7-7" />
                     <path d="M14 8h6v6" />
@@ -67,7 +68,7 @@
         </div>
 
         <div class="stat-card">
-            <span class="stat-icon text-indigo-500">
+            <span class="stat-icon-wrap text-navy-700">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16" />
                     <path d="M9 21v-6h6v6" />
@@ -249,7 +250,7 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-5">
-                        <span class="stat-icon text-blue-500"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg></span>
+                        <span class="stat-icon-wrap text-navy-600"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg></span>
                         <div>
                             <p class="font-medium text-slate-700">En attente</p>
                             <p class="text-2xl font-semibold text-slate-950">{{ $pendingCount }}</p>

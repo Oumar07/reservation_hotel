@@ -1,18 +1,31 @@
 @extends('layouts.app')
 
-@section('content')
-<main class="mx-auto max-w-6xl px-6 py-16">
-    <h1 class="mb-10 text-4xl font-semibold tracking-normal">Finaliser votre réservation</h1>
+@section('title', 'Paiement — StayHub')
 
-    <div class="grid gap-10 lg:grid-cols-[1.3fr_0.8fr]">
-        <section>
-            <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
+@section('content')
+<main class="page-container section-padding">
+    <div class="booking-steps reveal">
+        <div class="booking-step is-done"><span class="booking-step-dot">✓</span> Chambre</div>
+        <span class="hidden text-muted sm:inline" aria-hidden="true">—</span>
+        <div class="booking-step is-done"><span class="booking-step-dot">✓</span> Compte</div>
+        <span class="hidden text-muted sm:inline" aria-hidden="true">—</span>
+        <div class="booking-step is-active"><span class="booking-step-dot">3</span> Paiement</div>
+    </div>
+
+    <h1 class="reveal section-title">Finaliser votre réservation</h1>
+    <p class="reveal section-subtitle">Dernière étape avant votre séjour d'exception.</p>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-[1.3fr_0.85fr]">
+        <section class="reveal">
+            <div class="card p-6 sm:p-8">
                 <div class="mb-8 flex items-center gap-3">
-                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20" /></svg>
-                    <h2 class="text-2xl font-semibold">Détails du paiement</h2>
+                    <span class="grid h-12 w-12 place-items-center rounded-xl bg-navy-900/5 text-navy-700">
+                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20" /></svg>
+                    </span>
+                    <h2 class="text-xl font-semibold text-navy-900">Détails du paiement</h2>
                 </div>
 
-                <form method="POST" action="{{ route('bookings.store') }}" id="payment-form">
+                <form method="POST" action="{{ route('bookings.store') }}" id="payment-form" class="space-y-5">
                     @csrf
                     <input type="hidden" name="room_id" value="{{ $room->id }}">
                     <input type="hidden" name="date_arrivee" value="{{ $data['date_arrivee'] }}">
@@ -21,80 +34,57 @@
                     <input type="hidden" name="password" value="{{ $data['password'] }}">
 
                     <label class="block">
-                        <span class="mb-2 block font-medium">Numéro de carte</span>
-                        <input type="text" value="1234 5678 9012 3456" class="payment-input">
+                        <span class="form-label">Numéro de carte</span>
+                        <input type="text" value="1234 5678 9012 3456" class="form-input-filled" aria-label="Numéro de carte">
                     </label>
 
-                    <div class="mt-6 grid gap-5 sm:grid-cols-2">
+                    <div class="grid gap-5 sm:grid-cols-2">
                         <label class="block">
-                            <span class="mb-2 block font-medium">Date d'expiration</span>
-                            <input type="text" value="12/29" class="payment-input">
+                            <span class="form-label">Date d'expiration</span>
+                            <input type="text" value="12/29" class="form-input-filled" aria-label="Expiration">
                         </label>
                         <label class="block">
-                            <span class="mb-2 block font-medium">CVV</span>
-                            <input type="text" value="123" class="payment-input">
+                            <span class="form-label">CVV</span>
+                            <input type="text" value="123" class="form-input-filled" aria-label="CVV">
                         </label>
                     </div>
 
-                    <p class="mt-6 flex items-center gap-2 text-slate-500">
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+                    <p class="flex items-center gap-2 text-sm text-muted">
+                        <svg class="h-4 w-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
                         Vos informations de paiement sont sécurisées et chiffrées
                     </p>
                 </form>
             </div>
 
-            <button form="payment-form" class="mt-8 w-full rounded-2xl bg-blue-600 px-6 py-5 text-lg font-medium text-white transition hover:bg-blue-700">
-                Confirmer et payer {{ number_format($total, 0) }} CFA
+            <button form="payment-form" class="btn-gold mt-6 w-full py-4 text-base sm:text-lg">
+                Confirmer et payer {{ number_format($total, 0, ',', ' ') }} CFA
             </button>
         </section>
 
-        <aside class="h-max rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
-            <h2 class="text-2xl font-semibold">Résumé de la réservation</h2>
-            <img src="{{ $room->hotel->image ?: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80' }}"
-                 alt="{{ $room->hotel->nom }}"
-                 class="mt-6 h-48 w-full rounded-2xl object-cover">
+        <aside class="reveal lg:sticky lg:top-28 lg:self-start">
+            <div class="glass-card p-6 sm:p-8">
+                <h2 class="font-display text-2xl font-semibold text-navy-900">Résumé</h2>
+                <img src="{{ $room->hotel->image ?: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80' }}"
+                     alt="{{ $room->hotel->nom }}"
+                     class="mt-6 h-48 w-full rounded-2xl object-cover"
+                     loading="lazy">
 
-            <h3 class="mt-6 text-2xl font-semibold">{{ $room->hotel->nom }}</h3>
-            <p class="text-slate-500">{{ $room->hotel->localisation }}, {{ $room->hotel->pays }}</p>
+                <h3 class="mt-6 text-xl font-semibold text-navy-900">{{ $room->hotel->nom }}</h3>
+                <p class="text-sm text-muted">{{ $room->hotel->localisation }}, {{ $room->hotel->pays }}</p>
 
-            <div class="mt-7 divide-y divide-slate-100 border-y border-slate-100 py-4">
-                <div class="summary-row"><span>Chambre</span><strong>Chambre {{ ['simple' => 'Simple', 'double' => 'Double', 'suite' => 'Suite'][$room->type] ?? ucfirst($room->type) }}</strong></div>
-                <div class="summary-row"><span>Arrivée</span><strong>{{ $data['date_arrivee'] }}</strong></div>
-                <div class="summary-row"><span>Départ</span><strong>{{ $data['date_depart'] }}</strong></div>
-                <div class="summary-row"><span>Nuits</span><strong>{{ $nights }}</strong></div>
-            </div>
+                <dl class="mt-6 divide-y divide-navy-900/5 border-y border-navy-900/5 text-sm">
+                    <div class="flex justify-between gap-4 py-3"><dt class="text-muted">Chambre</dt><dd class="font-medium text-navy-900">Chambre {{ ['simple' => 'Simple', 'double' => 'Double', 'suite' => 'Suite'][$room->type] ?? ucfirst($room->type) }}</dd></div>
+                    <div class="flex justify-between gap-4 py-3"><dt class="text-muted">Arrivée</dt><dd class="font-medium text-navy-900">{{ $data['date_arrivee'] }}</dd></div>
+                    <div class="flex justify-between gap-4 py-3"><dt class="text-muted">Départ</dt><dd class="font-medium text-navy-900">{{ $data['date_depart'] }}</dd></div>
+                    <div class="flex justify-between gap-4 py-3"><dt class="text-muted">Nuits</dt><dd class="font-medium text-navy-900">{{ $nights }}</dd></div>
+                </dl>
 
-            <div class="mt-6 flex items-center justify-between">
-                <span class="text-2xl font-semibold">Total</span>
-                <span class="text-3xl font-semibold text-blue-600">{{ number_format($total, 0) }} CFA</span>
+                <div class="mt-6 flex items-center justify-between border-t border-navy-900/10 pt-6">
+                    <span class="text-lg font-semibold text-navy-900">Total</span>
+                    <span class="font-display text-3xl font-semibold text-gold-600">{{ number_format($total, 0, ',', ' ') }} CFA</span>
+                </div>
             </div>
         </aside>
     </div>
 </main>
-
-<style>
-    .payment-input {
-        width: 100%;
-        border-radius: 0.9rem;
-        border: 1px solid rgb(226 232 240);
-        background: rgb(248 250 252);
-        padding: 1rem;
-        color: rgb(15 23 42);
-        outline: none;
-    }
-
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 1.5rem;
-        padding: 0.75rem 0;
-        color: rgb(100 116 139);
-    }
-
-    .summary-row strong {
-        color: rgb(15 23 42);
-        font-weight: 500;
-        text-align: right;
-    }
-</style>
 @endsection

@@ -1,23 +1,39 @@
 @extends('layouts.app')
 
+@section('title', 'Créer une chambre — StayHub')
+
 @section('content')
-<main class="mx-auto max-w-xl px-6 py-10">
-    <h1 class="mb-6 text-3xl font-semibold">Créer une chambre</h1>
+<main class="page-container section-padding">
+    <div class="mx-auto max-w-xl reveal">
+        <h1 class="section-title">Créer une chambre</h1>
 
-    <form method="POST" action="{{ route('rooms.store') }}" class="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
-        @csrf
+        <form method="POST" action="{{ route('rooms.store') }}" class="card mt-8 space-y-5 p-6 sm:p-8">
+            @csrf
 
-        <select name="hotel_id" class="w-full rounded-xl border border-slate-200 p-3">
-            @foreach($hotels as $hotel)
-                <option value="{{ $hotel->id }}">{{ $hotel->nom }}</option>
-            @endforeach
-        </select>
+            <label class="block">
+                <span class="form-label">Hôtel</span>
+                <select name="hotel_id" required class="form-input">
+                    @foreach($hotels as $hotel)
+                        <option value="{{ $hotel->id }}">{{ $hotel->nom }}</option>
+                    @endforeach
+                </select>
+            </label>
 
-        <input type="text" name="type" placeholder="Type de chambre" class="w-full rounded-xl border border-slate-200 p-3">
-        <input type="number" name="prix" placeholder="Prix" class="w-full rounded-xl border border-slate-200 p-3">
-        <input type="number" name="capacite" placeholder="Capacité" class="w-full rounded-xl border border-slate-200 p-3">
+            <label class="block">
+                <span class="form-label">Type de chambre</span>
+                <input type="text" name="type" placeholder="simple, double, suite" required class="form-input">
+            </label>
+            <label class="block">
+                <span class="form-label">Prix (CFA)</span>
+                <input type="number" name="prix" placeholder="35000" required class="form-input">
+            </label>
+            <label class="block">
+                <span class="form-label">Capacité</span>
+                <input type="number" name="capacite" placeholder="2" required class="form-input">
+            </label>
 
-        <button type="submit" class="w-full rounded-xl bg-blue-600 px-5 py-3 font-medium text-white">Créer</button>
-    </form>
+            <button type="submit" class="btn-primary w-full">Créer</button>
+        </form>
+    </div>
 </main>
 @endsection
