@@ -6,7 +6,401 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+
+    --color-navy-950: #060f1c;
+    --color-navy-900: #0c1f3d;
+    --color-navy-800: #122a52;
+    --color-navy-700: #1a3a6b;
+    --color-navy-600: #234b8a;
+
+    --color-gold-50: #fdf8ef;
+    --color-gold-100: #f9edd4;
+    --color-gold-200: #f2d9a8;
+    --color-gold-400: #d4a853;
+    --color-gold-500: #c49a3c;
+    --color-gold-600: #a67c2a;
+
+    --color-surface: #f7f6f3;
+    --color-surface-elevated: #ffffff;
+    --color-muted: #64748b;
+
+    --shadow-soft: 0 4px 24px -4px rgb(12 31 61 / 0.08);
+    --shadow-lift: 0 20px 40px -12px rgb(12 31 61 / 0.15);
+    --shadow-glass: 0 8px 32px rgb(12 31 61 / 0.06);
+
+    --animate-fade-up: fade-up 0.6s ease-out both;
+    --animate-fade-in: fade-in 0.5s ease-out both;
 }
 
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-surface font-sans text-navy-900 antialiased;
+    }
+
+    ::selection {
+        @apply bg-gold-200 text-navy-900;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-gold-500;
+    }
+}
+
+@layer components {
+    .font-display {
+        font-family: var(--font-display);
+    }
+
+    /* ——— Layout ——— */
+    .page-container {
+        @apply mx-auto w-full max-w-[1540px] px-5 sm:px-8 lg:px-12;
+    }
+
+    .section-padding {
+        @apply py-12 sm:py-16 lg:py-20;
+    }
+
+    /* ——— Navigation ——— */
+    .site-nav {
+        @apply fixed inset-x-0 top-0 z-50 transition-all duration-300;
+    }
+
+    .site-nav.is-scrolled {
+        @apply border-b border-navy-900/5 bg-white/90 shadow-sm backdrop-blur-xl;
+    }
+
+    .site-nav:not(.is-scrolled) {
+        @apply bg-transparent;
+    }
+
+    .site-nav:not(.is-scrolled) .nav-brand-text,
+    .site-nav:not(.is-scrolled) .nav-link-item {
+        @apply text-white;
+    }
+
+    .site-nav:not(.is-scrolled) .nav-link-item:hover,
+    .site-nav:not(.is-scrolled) .nav-link-item.is-active {
+        @apply bg-white/15 text-white;
+    }
+
+    .site-nav.is-scrolled .nav-brand-text {
+        @apply text-navy-900;
+    }
+
+    .nav-link-item {
+        @apply inline-flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-medium text-navy-800 transition-all duration-200 sm:px-4 sm:text-[0.95rem];
+    }
+
+    .nav-link-item:hover {
+        @apply bg-navy-900/5 text-navy-900;
+    }
+
+    .nav-link-item.is-active {
+        @apply bg-navy-900 text-white shadow-md;
+    }
+
+    .nav-cta {
+        @apply inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 px-5 py-2.5 text-sm font-semibold text-navy-950 shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98];
+    }
+
+    /* ——— Buttons ——— */
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    .btn-primary {
+        @apply btn bg-navy-900 text-white shadow-md hover:-translate-y-0.5 hover:bg-navy-800 hover:shadow-lg active:scale-[0.98];
+    }
+
+    .btn-gold {
+        @apply btn bg-gradient-to-r from-gold-500 to-gold-400 text-navy-950 shadow-md hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98];
+    }
+
+    .btn-outline {
+        @apply btn border border-navy-900/15 bg-white text-navy-900 hover:border-navy-900/30 hover:bg-navy-900/5;
+    }
+
+    .btn-ghost {
+        @apply btn text-navy-700 hover:bg-navy-900/5;
+    }
+
+    .btn-danger {
+        @apply btn border border-red-200 bg-red-50 text-red-600 hover:bg-red-100;
+    }
+
+    /* ——— Cards ——— */
+    .card {
+        @apply rounded-2xl bg-white shadow-soft ring-1 ring-navy-900/5;
+    }
+
+    .glass-card {
+        @apply rounded-2xl border border-white/60 bg-white/75 shadow-glass backdrop-blur-xl;
+    }
+
+    .card-lift {
+        @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lift;
+    }
+
+    /* ——— Forms ——— */
+    .form-label {
+        @apply mb-2 block text-sm font-medium text-navy-800;
+    }
+
+    .form-input {
+        @apply w-full rounded-xl border border-navy-900/10 bg-white px-4 py-3 text-navy-900 placeholder:text-muted transition-colors outline-none focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10;
+    }
+
+    .form-input-filled {
+        @apply form-input bg-surface;
+    }
+
+    .form-field {
+        @apply relative;
+    }
+
+    .form-field .form-input {
+        @apply pt-5 pb-2;
+    }
+
+    .form-field .floating-label {
+        @apply pointer-events-none absolute left-4 top-3.5 text-sm text-muted transition-all duration-200;
+    }
+
+    .form-field .form-input:focus ~ .floating-label,
+    .form-field .form-input:not(:placeholder-shown) ~ .floating-label {
+        @apply top-1.5 text-xs font-medium text-navy-600;
+    }
+
+    /* ——— Hotel cards ——— */
+    .hotel-card {
+        @apply card card-lift group overflow-hidden;
+    }
+
+    .hotel-card-image {
+        @apply relative aspect-[4/3] overflow-hidden bg-navy-900/5;
+    }
+
+    .hotel-card-image img {
+        @apply h-full w-full object-cover transition-transform duration-500 group-hover:scale-110;
+    }
+
+    .hotel-card-badge {
+        @apply absolute left-4 top-4 rounded-full bg-navy-900/80 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm;
+    }
+
+    .hotel-card-price {
+        @apply absolute bottom-4 right-4 rounded-xl bg-white/95 px-4 py-2.5 text-right shadow-md backdrop-blur-sm;
+    }
+
+    .wishlist-btn {
+        @apply absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-navy-700 shadow-md backdrop-blur-sm transition-all hover:scale-110 hover:text-gold-500;
+    }
+
+    /* ——— Status chips ——— */
+    .chip {
+        @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide;
+    }
+
+    .chip-success {
+        @apply chip bg-emerald-50 text-emerald-700;
+    }
+
+    .chip-warning {
+        @apply chip bg-amber-50 text-amber-700;
+    }
+
+    .chip-danger {
+        @apply chip bg-red-50 text-red-600;
+    }
+
+    .chip-info {
+        @apply chip bg-blue-50 text-blue-700;
+    }
+
+    /* ——— Alerts ——— */
+    .alert {
+        @apply mb-6 flex items-start gap-3 rounded-2xl px-5 py-4 text-sm font-medium;
+    }
+
+    .alert-success {
+        @apply alert bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200;
+    }
+
+    .alert-error {
+        @apply alert bg-red-50 text-red-700 ring-1 ring-red-200;
+    }
+
+    /* ——— Search hero ——— */
+    .search-bar {
+        @apply glass-card grid w-full gap-2 p-2 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_0.85fr_auto];
+    }
+
+    .search-field {
+        @apply flex items-center gap-3 rounded-xl px-4 py-3.5 text-muted transition-colors focus-within:bg-gold-50/50;
+    }
+
+    .search-field + .search-field {
+        @apply sm:border-l sm:border-navy-900/10;
+    }
+
+    .search-icon {
+        @apply h-5 w-5 shrink-0 text-gold-500;
+    }
+
+    .search-input {
+        @apply w-full border-0 bg-transparent text-navy-900 outline-none placeholder:text-muted;
+    }
+
+    /* ——— Progress steps ——— */
+    .booking-steps {
+        @apply mb-10 flex flex-wrap items-center justify-center gap-2 sm:gap-4;
+    }
+
+    .booking-step {
+        @apply flex items-center gap-2 text-sm text-muted;
+    }
+
+    .booking-step.is-active {
+        @apply font-semibold text-navy-900;
+    }
+
+    .booking-step.is-done {
+        @apply text-emerald-600;
+    }
+
+    .booking-step-dot {
+        @apply grid h-8 w-8 place-items-center rounded-full bg-navy-900/10 text-xs font-bold text-navy-700;
+    }
+
+    .booking-step.is-active .booking-step-dot {
+        @apply bg-navy-900 text-white;
+    }
+
+    .booking-step.is-done .booking-step-dot {
+        @apply bg-emerald-500 text-white;
+    }
+
+    /* ——— Room selection ——— */
+    .room-option {
+        @apply card w-full p-0 text-left transition-all duration-200 hover:border-gold-400/50 hover:shadow-md;
+    }
+
+    .room-option.is-selected {
+        @apply border-2 border-gold-400 bg-gold-50/40 ring-2 ring-gold-400/20;
+    }
+
+    /* ——— Admin ——— */
+    .stat-card {
+        @apply card flex items-center gap-5 p-6 card-lift;
+    }
+
+    .stat-icon-wrap {
+        @apply grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-navy-900/5 to-gold-100;
+    }
+
+    .stat-icon-wrap svg {
+        @apply h-6 w-6;
+    }
+
+    .tab-button {
+        @apply inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-navy-700 transition-all duration-200;
+    }
+
+    .tab-button:hover {
+        @apply bg-navy-900/5 text-navy-900;
+    }
+
+    .tab-button.is-active {
+        @apply bg-navy-900 text-white shadow-md;
+    }
+
+    .modal-backdrop {
+        @apply fixed inset-0 z-50 grid place-items-center bg-navy-950/60 px-4 py-8 backdrop-blur-sm;
+    }
+
+    .modal-panel {
+        @apply w-full max-w-lg animate-fade-up rounded-2xl bg-white p-6 shadow-2xl sm:p-8;
+    }
+
+    /* ——— Tables ——— */
+    .data-table {
+        @apply w-full min-w-[720px] text-left;
+    }
+
+    .data-table thead {
+        @apply border-b border-navy-900/10 bg-surface text-sm text-muted;
+    }
+
+    .data-table th {
+        @apply px-6 py-4 font-medium;
+    }
+
+    .data-table td {
+        @apply px-6 py-4;
+    }
+
+    .data-table tbody tr {
+        @apply border-b border-navy-900/5 transition-colors hover:bg-surface/80;
+    }
+
+    /* ——— Empty states ——— */
+    .empty-state {
+        @apply card flex flex-col items-center justify-center px-8 py-16 text-center;
+    }
+
+    .empty-state-icon {
+        @apply mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-navy-900/5 text-navy-600;
+    }
+
+    /* ——— Animations ——— */
+    .reveal {
+        @apply opacity-0 translate-y-4 transition-all duration-700 ease-out;
+    }
+
+    .reveal.is-visible {
+        @apply opacity-100 translate-y-0;
+    }
+
+    .rating-stars {
+        @apply text-gold-400;
+    }
+
+    .section-title {
+        @apply font-display text-3xl font-semibold tracking-tight text-navy-900 sm:text-4xl;
+    }
+
+    .section-subtitle {
+        @apply mt-2 text-lg text-muted;
+    }
+
+    .sticky-booking-bar {
+        @apply fixed inset-x-0 bottom-0 z-40 border-t border-navy-900/10 bg-white/95 p-4 shadow-[0_-8px_30px_rgb(0_0_0/0.08)] backdrop-blur-xl lg:hidden;
+    }
+}
