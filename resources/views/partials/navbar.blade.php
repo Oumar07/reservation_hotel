@@ -1,4 +1,7 @@
-<header class="site-nav" data-site-nav>
+@php
+    $heroNav = request()->is('/') || (request()->is('hotels') && ! request()->routeIs('hotels.show'));
+@endphp
+<header class="site-nav {{ $heroNav ? '' : 'is-scrolled' }}" data-site-nav>
     <div class="page-container flex items-center justify-between py-4 lg:py-5">
         <a href="/hotels" class="flex items-center gap-3 transition-opacity hover:opacity-90">
             <span class="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-navy-900 to-navy-700 text-gold-400 shadow-md ring-2 ring-gold-400/30">

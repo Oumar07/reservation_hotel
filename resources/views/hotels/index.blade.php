@@ -164,7 +164,7 @@
                         $image = $hotel->image ?: $fallbackImages[$loop->index % count($fallbackImages)];
                         $available = $hotel->rooms->isNotEmpty();
                     @endphp
-                    <article class="hotel-card reveal">
+                    <article class="hotel-card group reveal">
                         <a href="{{ route('hotels.show', $hotel) }}" class="block">
                             <div class="hotel-card-image">
                                 <img src="{{ $image }}" alt="{{ $hotel->nom }}" loading="lazy" decoding="async">

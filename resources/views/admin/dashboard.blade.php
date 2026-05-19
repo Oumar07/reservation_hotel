@@ -104,7 +104,7 @@
     <section data-panel="hotels">
         <div class="mb-6 flex items-center justify-between gap-4">
             <h2 class="text-2xl font-semibold text-slate-950">Gestion des hôtels</h2>
-            <button type="button" data-open-modal class="rounded-xl bg-blue-600 px-5 py-3 font-medium text-white shadow-sm transition hover:bg-blue-700">+ Ajouter un hôtel</button>
+            <button type="button" data-open-modal class="btn-primary">+ Ajouter un hôtel</button>
         </div>
 
         <div class="space-y-5">
@@ -149,7 +149,7 @@
     <section data-panel="rooms" class="hidden">
         <div class="mb-6 flex items-center justify-between gap-4">
             <h2 class="text-2xl font-semibold text-slate-950">Toutes les chambres</h2>
-            <button type="button" data-open-room-modal class="rounded-xl bg-blue-600 px-5 py-3 font-medium text-white shadow-sm transition hover:bg-blue-700">+ Ajouter une chambre</button>
+            <button type="button" data-open-room-modal class="btn-primary">+ Ajouter une chambre</button>
         </div>
         <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             @forelse($rooms as $room)
@@ -261,8 +261,8 @@
         </div>
     </section>
 
-    <div id="hotel-modal" class="fixed inset-0 z-50 hidden place-items-start overflow-y-auto bg-black/70 px-4 py-8 sm:place-items-center">
-        <div data-modal-card class="my-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl">
+    <div id="hotel-modal" class="modal-backdrop hidden place-items-start overflow-y-auto sm:place-items-center">
+        <div data-modal-card class="modal-panel my-auto">
             <div class="mb-5 flex items-center justify-between">
                 <h2 class="text-2xl font-semibold text-slate-950">Ajouter un hôtel</h2>
                 <button type="button" data-close-modal class="text-3xl font-light leading-none text-slate-500 hover:text-slate-900" aria-label="Close">&times;</button>
@@ -297,13 +297,13 @@
                     <textarea name="description" rows="2" placeholder="Courte description" class="modal-input resize-none"></textarea>
                 </label>
 
-                <button type="submit" class="w-full rounded-xl bg-blue-600 px-5 py-3 font-medium text-white shadow-sm transition hover:bg-blue-700">Enregistrer l'hôtel</button>
+                <button type="submit" class="btn-primary w-full">Enregistrer l'hôtel</button>
             </form>
         </div>
     </div>
 
-    <div id="room-modal" class="fixed inset-0 z-50 hidden place-items-start overflow-y-auto bg-black/70 px-4 py-8 sm:place-items-center">
-        <div data-room-modal-card class="my-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl">
+    <div id="room-modal" class="modal-backdrop hidden place-items-start overflow-y-auto sm:place-items-center">
+        <div data-room-modal-card class="modal-panel my-auto">
             <div class="mb-5 flex items-center justify-between">
                 <h2 class="text-2xl font-semibold text-slate-950">Ajouter une chambre</h2>
                 <button type="button" data-close-room-modal class="text-3xl font-light leading-none text-slate-500 hover:text-slate-900" aria-label="Fermer">&times;</button>
@@ -347,84 +347,11 @@
                     <input type="url" name="image" placeholder="https://example.com/chambre.jpg" class="modal-input">
                 </label>
 
-                <button type="submit" class="w-full rounded-xl bg-blue-600 px-5 py-3 font-medium text-white shadow-sm transition hover:bg-blue-700">Enregistrer la chambre</button>
+                <button type="submit" class="btn-primary w-full">Enregistrer la chambre</button>
             </form>
         </div>
     </div>
 </div>
-
-<style>
-    .stat-card {
-        display: flex;
-        align-items: center;
-        gap: 1.25rem;
-        border-radius: 1.25rem;
-        background: white;
-        padding: 1.75rem;
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-        border: 1px solid rgb(241 245 249);
-    }
-
-    .stat-icon {
-        display: grid;
-        height: 3rem;
-        width: 3rem;
-        place-items: center;
-        border-radius: 9999px;
-        background: rgb(248 250 252);
-    }
-
-    .stat-icon svg {
-        height: 1.45rem;
-        width: 1.45rem;
-    }
-
-    .tab-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.55rem;
-        border-radius: 0.75rem;
-        padding: 0.75rem 1.15rem;
-        font-weight: 500;
-        color: rgb(15 23 42);
-        transition: 150ms ease;
-    }
-
-    .tab-icon {
-        height: 1.15rem;
-        width: 1.15rem;
-    }
-
-    .tab-button:hover {
-        background: rgb(239 246 255);
-        color: rgb(37 99 235);
-    }
-
-    .tab-button.is-active {
-        background: rgb(37 99 235);
-        color: white;
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
-    }
-
-    .tab-button.is-active:hover {
-        background: rgb(37 99 235);
-        color: white;
-    }
-
-    .modal-input {
-        width: 100%;
-        border-radius: 0.85rem;
-        border: 1px solid rgb(226 232 240);
-        padding: 0.75rem 0.95rem;
-        color: rgb(15 23 42);
-        outline: none;
-    }
-
-    .modal-input:focus {
-        border-color: rgb(37 99 235);
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-    }
-</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {

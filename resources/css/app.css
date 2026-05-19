@@ -131,28 +131,33 @@
     }
 
     /* ——— Buttons ——— */
-    .btn {
+    .btn,
+    .btn-primary,
+    .btn-gold,
+    .btn-outline,
+    .btn-ghost,
+    .btn-danger {
         @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
     }
 
     .btn-primary {
-        @apply btn bg-navy-900 text-white shadow-md hover:-translate-y-0.5 hover:bg-navy-800 hover:shadow-lg active:scale-[0.98];
+        @apply bg-navy-900 text-white shadow-md hover:-translate-y-0.5 hover:bg-navy-800 hover:shadow-lg active:scale-[0.98];
     }
 
     .btn-gold {
-        @apply btn bg-gradient-to-r from-gold-500 to-gold-400 text-navy-950 shadow-md hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98];
+        @apply bg-gradient-to-r from-gold-500 to-gold-400 text-navy-950 shadow-md hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98];
     }
 
     .btn-outline {
-        @apply btn border border-navy-900/15 bg-white text-navy-900 hover:border-navy-900/30 hover:bg-navy-900/5;
+        @apply border border-navy-900/15 bg-white text-navy-900 hover:border-navy-900/30 hover:bg-navy-900/5;
     }
 
     .btn-ghost {
-        @apply btn text-navy-700 hover:bg-navy-900/5;
+        @apply text-navy-700 hover:bg-navy-900/5;
     }
 
     .btn-danger {
-        @apply btn border border-red-200 bg-red-50 text-red-600 hover:bg-red-100;
+        @apply border border-red-200 bg-red-50 text-red-600 hover:bg-red-100;
     }
 
     /* ——— Cards ——— */
@@ -165,7 +170,11 @@
     }
 
     .card-lift {
-        @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lift;
+        @apply transition-all duration-300 hover:-translate-y-1;
+    }
+
+    .card-lift:hover {
+        box-shadow: var(--shadow-lift);
     }
 
     /* ——— Forms ——— */
@@ -178,7 +187,7 @@
     }
 
     .form-input-filled {
-        @apply form-input bg-surface;
+        @apply w-full rounded-xl border border-navy-900/10 bg-surface px-4 py-3 text-navy-900 placeholder:text-muted transition-colors outline-none focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10;
     }
 
     .form-field {
@@ -200,7 +209,11 @@
 
     /* ——— Hotel cards ——— */
     .hotel-card {
-        @apply card card-lift group overflow-hidden;
+        @apply overflow-hidden rounded-2xl bg-white shadow-soft ring-1 ring-navy-900/5 transition-all duration-300 hover:-translate-y-1;
+    }
+
+    .hotel-card:hover {
+        box-shadow: var(--shadow-lift);
     }
 
     .hotel-card-image {
@@ -229,19 +242,19 @@
     }
 
     .chip-success {
-        @apply chip bg-emerald-50 text-emerald-700;
+        @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide bg-emerald-50 text-emerald-700;
     }
 
     .chip-warning {
-        @apply chip bg-amber-50 text-amber-700;
+        @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide bg-amber-50 text-amber-700;
     }
 
     .chip-danger {
-        @apply chip bg-red-50 text-red-600;
+        @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide bg-red-50 text-red-600;
     }
 
     .chip-info {
-        @apply chip bg-blue-50 text-blue-700;
+        @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide bg-blue-50 text-blue-700;
     }
 
     /* ——— Alerts ——— */
@@ -250,16 +263,16 @@
     }
 
     .alert-success {
-        @apply alert bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200;
+        @apply mb-6 flex items-start gap-3 rounded-2xl px-5 py-4 text-sm font-medium bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200;
     }
 
     .alert-error {
-        @apply alert bg-red-50 text-red-700 ring-1 ring-red-200;
+        @apply mb-6 flex items-start gap-3 rounded-2xl px-5 py-4 text-sm font-medium bg-red-50 text-red-700 ring-1 ring-red-200;
     }
 
     /* ——— Search hero ——— */
     .search-bar {
-        @apply glass-card grid w-full gap-2 p-2 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_0.85fr_auto];
+        @apply grid w-full gap-2 rounded-2xl border border-white/60 bg-white/75 p-2 shadow-[var(--shadow-glass)] backdrop-blur-xl sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_0.85fr_auto];
     }
 
     .search-field {
@@ -309,7 +322,7 @@
 
     /* ——— Room selection ——— */
     .room-option {
-        @apply card w-full p-0 text-left transition-all duration-200 hover:border-gold-400/50 hover:shadow-md;
+        @apply w-full rounded-2xl bg-white p-0 text-left shadow-soft ring-1 ring-navy-900/5 transition-all duration-200 hover:border-gold-400/50 hover:shadow-md;
     }
 
     .room-option.is-selected {
@@ -318,7 +331,11 @@
 
     /* ——— Admin ——— */
     .stat-card {
-        @apply card flex items-center gap-5 p-6 card-lift;
+        @apply flex items-center gap-5 rounded-2xl bg-white p-6 shadow-soft ring-1 ring-navy-900/5 transition-all duration-300 hover:-translate-y-1;
+    }
+
+    .stat-card:hover {
+        box-shadow: var(--shadow-lift);
     }
 
     .stat-icon-wrap {
@@ -341,6 +358,10 @@
         @apply bg-navy-900 text-white shadow-md;
     }
 
+    .tab-icon {
+        @apply h-4 w-4 shrink-0;
+    }
+
     .modal-backdrop {
         @apply fixed inset-0 z-50 grid place-items-center bg-navy-950/60 px-4 py-8 backdrop-blur-sm;
     }
@@ -350,7 +371,7 @@
     }
 
     .modal-input {
-        @apply form-input;
+        @apply w-full rounded-xl border border-navy-900/10 bg-white px-4 py-3 text-navy-900 placeholder:text-muted transition-colors outline-none focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10;
     }
 
     /* ——— Tables ——— */
@@ -376,7 +397,7 @@
 
     /* ——— Empty states ——— */
     .empty-state {
-        @apply card flex flex-col items-center justify-center px-8 py-16 text-center;
+        @apply flex flex-col items-center justify-center rounded-2xl bg-white px-8 py-16 text-center shadow-soft ring-1 ring-navy-900/5;
     }
 
     .empty-state-icon {
