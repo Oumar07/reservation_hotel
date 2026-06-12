@@ -30,8 +30,6 @@
                     <input type="hidden" name="room_id" value="{{ $room->id }}">
                     <input type="hidden" name="date_arrivee" value="{{ $data['date_arrivee'] }}">
                     <input type="hidden" name="date_depart" value="{{ $data['date_depart'] }}">
-                    <input type="hidden" name="email" value="{{ $data['email'] }}">
-                    <input type="hidden" name="password" value="{{ $data['password'] }}">
 
                     <label class="block">
                         <span class="form-label">Numéro de carte</span>

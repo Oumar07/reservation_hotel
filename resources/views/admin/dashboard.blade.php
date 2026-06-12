@@ -26,7 +26,7 @@
         <p class="section-subtitle">Gérez votre activité hôtelière</p>
     </div>
 
-    <div class="mb-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+    <div class="mb-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         <div class="stat-card">
             <span class="stat-icon-wrap text-emerald-600">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -80,24 +80,72 @@
                 <h2 class="text-2xl font-semibold text-slate-950">{{ $hotels->count() }}</h2>
             </div>
         </div>
+
+        <div class="stat-card">
+            <span class="stat-icon-wrap text-blue-600">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 7v11M21 18v-6a3 3 0 0 0-3-3H3" />
+                    <path d="M7 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3" />
+                </svg>
+            </span>
+            <div>
+                <p class="text-sm font-normal text-slate-500">Chambres au total</p>
+                <h2 class="text-2xl font-semibold text-slate-950">{{ $rooms->count() }}</h2>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-icon-wrap text-amber-500">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
+                </svg>
+            </span>
+            <div>
+                <p class="text-sm font-normal text-slate-500">Nombre d'avis</p>
+                <h2 class="text-2xl font-semibold text-slate-950">{{ $totalReviews }}</h2>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <span class="stat-icon-wrap text-violet-600">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+            </span>
+            <div>
+                <p class="text-sm font-normal text-slate-500">Utilisateurs</p>
+                <h2 class="text-2xl font-semibold text-slate-950">{{ $totalUsers }}</h2>
+            </div>
+        </div>
     </div>
 
     <div class="mb-10 flex flex-wrap gap-3 rounded-2xl bg-white/60 p-3 shadow-sm ring-1 ring-slate-100">
         <button type="button" class="tab-button is-active" data-tab="hotels">
-            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16" /><path d="M9 21v-6h6v6" /><path d="M8 7h.01M12 7h.01M16 7h.01M8 11h.01M12 11h.01M16 11h.01" /></svg>
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16"/><path d="M9 21v-6h6v6"/><path d="M8 7h.01M12 7h.01M16 7h.01M8 11h.01M12 11h.01M16 11h.01"/></svg>
             Hôtels
         </button>
         <button type="button" class="tab-button" data-tab="rooms">
-            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v11M21 18v-6a3 3 0 0 0-3-3H3" /><path d="M7 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3" /></svg>
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v11M21 18v-6a3 3 0 0 0-3-3H3"/><path d="M7 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/></svg>
             Chambres
         </button>
         <button type="button" class="tab-button" data-tab="bookings">
-            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18" /><rect x="3" y="4" width="18" height="18" rx="2" /></svg>
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/></svg>
             Réservations
         </button>
         <button type="button" class="tab-button" data-tab="revenue">
-            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6" /></svg>
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/></svg>
             Revenus
+        </button>
+        <button type="button" class="tab-button" data-tab="reviews">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
+            Avis ({{ $totalReviews }})
+        </button>
+        <button type="button" class="tab-button" data-tab="users">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Utilisateurs ({{ $totalUsers }})
         </button>
     </div>
 
@@ -258,6 +306,109 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    {{-- ─── Onglet Avis ─────────────────────────────────────────────────────── --}}
+    <section data-panel="reviews" class="hidden">
+        <div class="mb-6 flex items-center justify-between gap-4">
+            <h2 class="text-2xl font-semibold text-slate-950">Derniers avis reçus</h2>
+            <span class="rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-700">{{ $totalReviews }} avis au total</span>
+        </div>
+
+        @if($latestReviews->isEmpty())
+            <div class="rounded-2xl bg-white p-8 text-center shadow-sm ring-1 ring-slate-100">
+                <span class="text-4xl">💬</span>
+                <p class="mt-3 font-medium text-slate-700">Aucun avis pour le moment</p>
+                <p class="mt-1 text-sm text-slate-500">Les avis des clients apparaîtront ici.</p>
+            </div>
+        @else
+            <div class="space-y-4">
+                @foreach($latestReviews as $review)
+                    <div class="flex flex-col gap-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 sm:flex-row sm:items-start sm:justify-between">
+                        <div class="flex gap-4">
+                            <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-slate-800 to-slate-600 text-lg font-bold uppercase text-amber-400">
+                                {{ mb_substr($review->client->nom ?? 'A', 0, 1) }}
+                            </span>
+                            <div>
+                                <p class="font-semibold text-slate-950">{{ $review->client->nom ?? 'Anonyme' }}</p>
+                                <p class="text-sm text-slate-500">
+                                    <a href="{{ route('hotels.show', $review->hotel_id) }}" class="hover:underline text-blue-600">
+                                        {{ $review->hotel->nom ?? 'Hôtel supprimé' }}
+                                    </a>
+                                    &middot; {{ $review->created_at->diffForHumans() }}
+                                </p>
+                                <p class="mt-2 text-slate-700">{{ Str::limit($review->commentaire, 150) }}</p>
+                            </div>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-1">
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= $review->note)
+                                    <span class="text-amber-400 text-lg">★</span>
+                                @else
+                                    <span class="text-slate-300 text-lg">☆</span>
+                                @endif
+                            @endfor
+                            <span class="ml-1 font-semibold text-slate-950">{{ $review->note }}/5</span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </section>
+
+    {{-- ─── Onglet Utilisateurs ─────────────────────────────────────────────── --}}
+    <section data-panel="users" class="hidden">
+        <div class="mb-6 flex items-center justify-between gap-4">
+            <h2 class="text-2xl font-semibold text-slate-950">Gestion des utilisateurs</h2>
+            <a href="{{ route('admin.users.index') }}" class="btn-primary">Voir tout →</a>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
+            <table class="w-full min-w-[760px] text-left">
+                <thead class="border-b border-slate-100 text-sm text-slate-500">
+                    <tr>
+                        <th class="px-6 py-4 font-medium">Nom</th>
+                        <th class="px-6 py-4 font-medium">Email</th>
+                        <th class="px-6 py-4 font-medium">Rôle</th>
+                        <th class="px-6 py-4 font-medium">Inscrit le</th>
+                        <th class="px-6 py-4 text-right font-medium">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @php
+                        $dashboardUsers = App\Models\Client::latest()->take(10)->get();
+                    @endphp
+                    @forelse($dashboardUsers as $dUser)
+                        <tr>
+                            <td class="px-6 py-5">
+                                <div class="flex items-center gap-3">
+                                    <span class="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 text-sm font-bold uppercase text-white">
+                                        {{ mb_substr($dUser->nom, 0, 1) }}
+                                    </span>
+                                    <span class="font-medium text-slate-950">{{ $dUser->nom }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-5 text-slate-500">{{ $dUser->email }}</td>
+                            <td class="px-6 py-5">
+                                @if($dUser->role === 'admin')
+                                    <span class="rounded-full bg-violet-50 px-3 py-1 text-sm font-medium text-violet-700">Admin</span>
+                                @else
+                                    <span class="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600">Client</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-5 text-slate-500">{{ $dUser->created_at?->format('d/m/Y') ?? '—' }}</td>
+                            <td class="px-6 py-5 text-right">
+                                <a href="{{ route('admin.users.show', $dUser) }}" class="text-sm font-medium text-blue-600 transition hover:text-blue-800">Détails</a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-slate-500">Aucun utilisateur pour le moment.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </section>
 

@@ -89,28 +89,14 @@
 
     /* ——— Navigation ——— */
     .site-nav {
-        @apply fixed inset-x-0 top-0 z-50 transition-all duration-300;
+        @apply fixed inset-x-0 top-0 z-50 border-b border-navy-900/8 bg-white shadow-sm transition-shadow duration-300;
     }
 
     .site-nav.is-scrolled {
-        @apply border-b border-navy-900/5 bg-white/90 shadow-sm backdrop-blur-xl;
+        @apply shadow-md;
     }
 
-    .site-nav:not(.is-scrolled) {
-        @apply bg-transparent;
-    }
-
-    .site-nav:not(.is-scrolled) .nav-brand-text,
-    .site-nav:not(.is-scrolled) .nav-link-item {
-        @apply text-white;
-    }
-
-    .site-nav:not(.is-scrolled) .nav-link-item:hover,
-    .site-nav:not(.is-scrolled) .nav-link-item.is-active {
-        @apply bg-white/15 text-white;
-    }
-
-    .site-nav.is-scrolled .nav-brand-text {
+    .site-nav .nav-brand-text {
         @apply text-navy-900;
     }
 

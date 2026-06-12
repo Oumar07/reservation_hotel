@@ -7,8 +7,10 @@
     $fallbackImage = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1800&q=85';
     $roomFallback = 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=700&q=80';
     $heroImage = $hotel->image ?: $fallbackImage;
-    $rating = round($hotel->reviews->avg('note') ?: (4.4 + (($hotel->id % 6) / 10)), 1);
-    $reviewCount = $hotel->reviews->count() ?: (160 + ($hotel->id * 37));
+    $realReviews = $hotel->reviews->sortByDesc('created_at');
+    $realAvg = $realReviews->avg('note');
+    $rating = $realAvg ? round($realAvg, 1) : round(4.4 + (($hotel->id % 6) / 10), 1);
+    $reviewCount = $realReviews->count();
     $roomTypeLabels = ['simple' => 'Simple', 'double' => 'Double', 'suite' => 'Suite'];
 @endphp
 
@@ -41,9 +43,16 @@
                     {{ $hotel->localisation }}, {{ $hotel->pays }}
                 </span>
                 <span aria-hidden="true">&middot;</span>
-                <span class="rating-stars">★★★★★</span>
+                @php
+                    $fullStars = floor($rating);
+                    $hasHalf = ($rating - $fullStars) >= 0.5;
+                    $emptyStars = 5 - $fullStars - ($hasHalf ? 1 : 0);
+                @endphp
+                <span class="rating-stars" aria-label="Note: {{ $rating }} sur 5">
+                    {!! str_repeat('★', $fullStars) . ($hasHalf ? '½' : '') . str_repeat('☆', $emptyStars) !!}
+                </span>
                 <span class="font-semibold text-navy-900">{{ $rating }}</span>
-                <span>({{ $reviewCount }} avis)</span>
+                <span>({{ $reviewCount }} {{ $reviewCount === 1 ? 'avis' : 'avis' }})</span>
             </div>
 
             <p class="mt-8 max-w-3xl text-lg leading-relaxed text-navy-800/80">
@@ -107,39 +116,146 @@
                 @endforelse
             </div>
 
-            <h2 class="mt-14 text-2xl font-semibold text-navy-900">Avis des voyageurs</h2>
-            <div class="mt-6 space-y-4">
-                @foreach([
-                    ['S', 'Sarah M.', '2026-02-15', 'Vue absolument magnifique et service impeccable. Le séjour était inoubliable.', 5],
-                    ['J', 'James K.', '2026-01-20', 'Très bel établissement avec de superbes équipements. Le restaurant est excellent.', 4],
-                    ['E', 'Emma L.', '2025-12-10', 'Destination parfaite pour une lune de miel. Chaque détail était soigné.', 5],
-                ] as $review)
-                    <article class="card p-5 sm:p-6">
-                        <div class="flex items-start justify-between gap-4">
-                            <div class="flex gap-4">
-                                <span class="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-navy-900 to-navy-700 font-semibold text-gold-400">{{ $review[0] }}</span>
-                                <div>
-                                    <p class="font-semibold text-navy-900">{{ $review[1] }}</p>
-                                    <p class="text-sm text-muted">{{ $review[2] }}</p>
+            {{-- ═══════════════════════════════════════════════════════ --}}
+            {{-- SECTION AVIS                                            --}}
+            {{-- ═══════════════════════════════════════════════════════ --}}
+            <div class="mt-14" id="avis">
+                <div class="flex flex-wrap items-center gap-6">
+                    <h2 class="text-2xl font-semibold text-navy-900">Avis des voyageurs</h2>
+                    @if($reviewCount > 0)
+                        <div class="flex items-center gap-2 rounded-full bg-gold-50 px-4 py-1.5 ring-1 ring-gold-200">
+                            <span class="rating-stars text-base">
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= floor($rating))
+                                        <span class="text-gold-500">★</span>
+                                    @elseif($i <= $rating)
+                                        <span class="text-gold-300">★</span>
+                                    @else
+                                        <span class="text-gray-300">☆</span>
+                                    @endif
+                                @endfor
+                            </span>
+                            <span class="font-bold text-navy-900">{{ $rating }}</span>
+                            <span class="text-sm text-muted">/ 5 &middot; {{ $reviewCount }} {{ $reviewCount === 1 ? 'avis' : 'avis' }}</span>
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Messages flash --}}
+                @if(session('review_success'))
+                    <div class="mt-4 flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800">
+                        <svg class="h-5 w-5 shrink-0 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        <p class="text-sm font-medium">{{ session('review_success') }}</p>
+                    </div>
+                @endif
+
+                {{-- Liste des avis réels --}}
+                <div class="mt-6 space-y-4">
+                    @forelse($realReviews as $review)
+                        <article class="card p-5 sm:p-6">
+                            <div class="flex items-start justify-between gap-4">
+                                <div class="flex gap-4">
+                                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br from-navy-900 to-navy-700 font-semibold text-gold-400 uppercase">
+                                        {{ mb_substr($review->client->nom ?? 'A', 0, 1) }}
+                                    </span>
+                                    <div>
+                                        <p class="font-semibold text-navy-900">{{ $review->client->nom ?? 'Anonyme' }}</p>
+                                        <p class="text-sm text-muted">{{ $review->created_at->format('d M Y') }}</p>
+                                    </div>
+                                </div>
+                                <div class="flex shrink-0 items-center gap-1">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $review->note)
+                                            <span class="text-gold-500 text-lg">★</span>
+                                        @else
+                                            <span class="text-gray-300 text-lg">☆</span>
+                                        @endif
+                                    @endfor
                                 </div>
                             </div>
-                            <span class="rating-stars text-sm">{{ str_repeat('★', $review[4]) }}{{ str_repeat('☆', 5 - $review[4]) }}</span>
+                            <p class="mt-4 leading-relaxed text-navy-800/80">{{ $review->commentaire }}</p>
+                        </article>
+                    @empty
+                        <div class="flex items-center gap-4 rounded-2xl border border-dashed border-navy-900/20 bg-surface/50 p-8 text-center">
+                            <div class="w-full">
+                                <span class="text-4xl">💬</span>
+                                <p class="mt-3 font-medium text-navy-900">Aucun avis pour le moment</p>
+                                <p class="mt-1 text-sm text-muted">Soyez le premier à partager votre expérience !</p>
+                            </div>
                         </div>
-                        <p class="mt-4 leading-relaxed text-navy-800/80">{{ $review[3] }}</p>
-                    </article>
-                @endforeach
+                    @endforelse
+                </div>
+
+                {{-- ─── Formulaire pour laisser un avis ───────────────────── --}}
+                <div class="mt-10 rounded-2xl border border-navy-900/10 bg-white p-6 shadow-soft sm:p-8" id="laisser-un-avis">
+                    <h3 class="text-xl font-semibold text-navy-900">Laisser un avis</h3>
+                    <p class="mt-1 text-sm text-muted">Vous devez avoir effectué une réservation dans cet hôtel pour publier un avis.</p>
+
+                    @if($errors->has('email') && request()->is('hotels/*'))
+                        <div class="mt-4 flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-red-700">
+                            <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                            <p class="text-sm font-medium">{{ $errors->first('email') }}</p>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('reviews.store') }}" class="mt-6 space-y-5">
+                        @csrf
+                        <input type="hidden" name="hotel_id" value="{{ $hotel->id }}">
+
+                        <label class="block">
+                            <span class="form-label">Votre adresse e-mail <span class="text-red-500">*</span></span>
+                            <input type="email" name="email"
+                                   value="{{ old('email', session('booking_email')) }}"
+                                   class="form-input-filled @error('email') border-red-400 @enderror"
+                                   placeholder="vous@exemple.com" required
+                                   id="review-email">
+                        </label>
+
+                        {{-- Sélecteur d'étoiles --}}
+                        <div>
+                            <span class="form-label">Votre note <span class="text-red-500">*</span></span>
+                            <div class="mt-2 flex gap-1" id="star-rating" role="group" aria-label="Choisir une note">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <button type="button"
+                                            class="star-btn text-3xl text-gray-300 transition-colors hover:text-gold-500 focus:outline-none"
+                                            data-value="{{ $i }}"
+                                            aria-label="{{ $i }} étoile{{ $i > 1 ? 's' : '' }}"
+                                            id="star-{{ $i }}">★</button>
+                                @endfor
+                            </div>
+                            <input type="hidden" name="note" id="review-note" value="{{ old('note') }}" required>
+                            @error('note')
+                                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <label class="block">
+                            <span class="form-label">Votre commentaire <span class="text-red-500">*</span></span>
+                            <textarea name="commentaire" rows="4"
+                                      class="form-input-filled resize-none @error('commentaire') border-red-400 @enderror"
+                                      placeholder="Partagez votre expérience dans cet hôtel..."
+                                      required minlength="10" maxlength="1000"
+                                      id="review-commentaire">{{ old('commentaire') }}</textarea>
+                            @error('commentaire')
+                                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                            @enderror
+                        </label>
+
+                        <button type="submit" class="btn-primary" id="submit-review">
+                            Publier mon avis
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 
         <aside class="reveal lg:sticky lg:top-28 lg:self-start">
-            <div class="glass-card p-6 sm:p-8">
+            <div class="card p-6 sm:p-8">
                 <h2 class="font-display text-2xl font-semibold text-navy-900">Réserver votre séjour</h2>
 
                 <form method="POST" action="{{ route('bookings.payment') }}" data-booking-form class="mt-6">
                     @csrf
                     <input type="hidden" name="room_id" data-room-id-input>
-                    <input type="hidden" name="email" data-email-input>
-                    <input type="hidden" name="password" data-password-input>
 
                     <div class="hidden rounded-xl border border-gold-200 bg-gold-50/60 p-4" data-selected-room-box>
                         <p class="font-semibold text-navy-900" data-selected-room-name></p>
@@ -157,6 +273,13 @@
                         <input type="date" name="date_depart" required class="form-input-filled" data-checkout>
                     </label>
 
+                    @if($errors->has('date_arrivee'))
+                        <div class="mt-4 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700">
+                            <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                            <p class="text-sm font-medium">{{ $errors->first('date_arrivee') }}</p>
+                        </div>
+                    @endif
+
                     <div class="mt-6 hidden rounded-xl border border-navy-900/10 bg-surface p-4" data-total-box>
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-muted" data-total-label></span>
@@ -164,7 +287,16 @@
                         </div>
                     </div>
 
-                    <button type="button" data-open-auth class="btn-primary mt-6 w-full py-4" disabled>Réserver maintenant</button>
+                    @auth
+                        {{-- Utilisateur connecté : soumettre directement --}}
+                        <button type="submit" data-book-btn class="btn-primary mt-6 w-full py-4" disabled>Réserver maintenant</button>
+                    @else
+                        {{-- Visiteur : rediriger vers login --}}
+                        <a href="{{ route('auth.login') }}" data-book-link class="btn-primary mt-6 w-full py-4 text-center hidden">
+                            Se connecter pour réserver
+                        </a>
+                        <button type="button" data-book-btn class="btn-primary mt-6 w-full py-4" disabled>Réserver maintenant</button>
+                    @endauth
 
                     <p class="mt-4 flex items-center justify-center gap-2 text-xs text-muted">
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
@@ -175,28 +307,12 @@
         </aside>
     </section>
 
-    <div id="auth-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
-        <div data-auth-card class="modal-panel">
-            <div class="mb-6 flex items-center justify-between">
-                <h2 id="auth-modal-title" class="font-display text-2xl font-semibold text-navy-900">Créer votre compte</h2>
-                <button type="button" data-close-auth class="grid h-10 w-10 place-items-center rounded-xl text-muted transition hover:bg-surface hover:text-navy-900" aria-label="Fermer">&times;</button>
-            </div>
-            <div class="space-y-4">
-                <label class="block">
-                    <span class="form-label">Adresse e-mail</span>
-                    <input type="email" data-auth-email class="form-input" placeholder="vous@exemple.com" required>
-                </label>
-                <label class="block">
-                    <span class="form-label">Mot de passe</span>
-                    <input type="password" data-auth-password class="form-input" placeholder="Mot de passe" required>
-                </label>
-                <button type="button" data-submit-auth class="btn-primary w-full">Continuer vers le paiement</button>
-            </div>
-        </div>
-    </div>
-
     <div class="sticky-booking-bar" data-mobile-book-bar style="display: none;">
-        <button type="button" data-open-auth-mobile class="btn-primary w-full" disabled>Réserver</button>
+        @auth
+            <button type="button" data-mobile-book class="btn-primary w-full" disabled>Réserver</button>
+        @else
+            <a href="{{ route('auth.login') }}" class="btn-primary w-full text-center">Se connecter pour réserver</a>
+        @endauth
     </div>
 </main>
 
@@ -214,22 +330,19 @@
         const totalBox = document.querySelector('[data-total-box]');
         const totalLabel = document.querySelector('[data-total-label]');
         const totalPrice = document.querySelector('[data-total-price]');
-        const bookButton = document.querySelector('[data-open-auth]');
-        const mobileBook = document.querySelector('[data-open-auth-mobile]');
+        const bookButton = document.querySelector('[data-book-btn]');
+        const bookLink = document.querySelector('[data-book-link]');
+        const mobileBook = document.querySelector('[data-mobile-book]');
         const mobileBar = document.querySelector('[data-mobile-book-bar]');
         const form = document.querySelector('[data-booking-form]');
-        const modal = document.getElementById('auth-modal');
-        const modalCard = document.querySelector('[data-auth-card]');
-        const emailInput = document.querySelector('[data-auth-email]');
-        const passwordInput = document.querySelector('[data-auth-password]');
-        const hiddenEmail = document.querySelector('[data-email-input]');
-        const hiddenPassword = document.querySelector('[data-password-input]');
+        const isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
         let selectedPrice = 0;
 
         const calculate = () => {
             if (!selectedPrice || !checkin.value || !checkout.value) {
                 totalBox.classList.add('hidden');
-                bookButton.disabled = true;
+                if (bookButton) bookButton.disabled = true;
+                if (bookLink) { bookLink.classList.add('hidden'); if (bookButton) bookButton.classList.remove('hidden'); }
                 if (mobileBook) mobileBook.disabled = true;
                 return;
             }
@@ -240,7 +353,8 @@
 
             if (nights <= 0) {
                 totalBox.classList.add('hidden');
-                bookButton.disabled = true;
+                if (bookButton) bookButton.disabled = true;
+                if (bookLink) { bookLink.classList.add('hidden'); if (bookButton) bookButton.classList.remove('hidden'); }
                 if (mobileBook) mobileBook.disabled = true;
                 return;
             }
@@ -248,7 +362,15 @@
             totalLabel.textContent = `${selectedPrice.toLocaleString('fr-FR')} CFA × ${nights} nuit${nights > 1 ? 's' : ''}`;
             totalPrice.textContent = `${(selectedPrice * nights).toLocaleString('fr-FR')} CFA`;
             totalBox.classList.remove('hidden');
-            bookButton.disabled = false;
+
+            if (isAuthenticated) {
+                if (bookButton) bookButton.disabled = false;
+            } else {
+                // Guest: show login link, hide disabled button
+                if (bookButton) bookButton.classList.add('hidden');
+                if (bookLink) bookLink.classList.remove('hidden');
+            }
+
             if (mobileBook) {
                 mobileBook.disabled = false;
                 mobileBook.textContent = `Réserver · ${(selectedPrice * nights).toLocaleString('fr-FR')} CFA`;
@@ -273,36 +395,47 @@
         checkin.addEventListener('change', calculate);
         checkout.addEventListener('change', calculate);
 
-        const closeModal = () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('grid');
-        };
-
-        const openModal = () => {
-            if (bookButton.disabled) return;
-            modal.classList.remove('hidden');
-            modal.classList.add('grid');
-        };
-
-        bookButton.addEventListener('click', openModal);
-        mobileBook?.addEventListener('click', openModal);
-
-        document.querySelector('[data-submit-auth]').addEventListener('click', () => {
-            if (!emailInput.value || !passwordInput.value) {
-                emailInput.reportValidity();
-                passwordInput.reportValidity();
-                return;
-            }
-
-            hiddenEmail.value = emailInput.value;
-            hiddenPassword.value = passwordInput.value;
-            form.submit();
-        });
-
-        document.querySelector('[data-close-auth]').addEventListener('click', closeModal);
-        modal.addEventListener('click', closeModal);
-        modalCard.addEventListener('click', (event) => event.stopPropagation());
+        // Mobile book button submits the main form
+        if (mobileBook && form) {
+            mobileBook.addEventListener('click', () => {
+                if (!mobileBook.disabled) form.submit();
+            });
+        }
     });
+
+    // ─── Sélecteur d'étoiles interactif ─────────────────────────────────────
+    (function () {
+        const starBtns = document.querySelectorAll('.star-btn');
+        const noteInput = document.getElementById('review-note');
+
+        if (!starBtns.length || !noteInput) return;
+
+        const setStars = (value) => {
+            starBtns.forEach((btn) => {
+                const v = parseInt(btn.dataset.value, 10);
+                btn.style.color = v <= value ? '#c9a84c' : '#d1d5db';
+            });
+            noteInput.value = value;
+        };
+
+        // Restaurer la valeur existante (old input)
+        const initialNote = parseInt(noteInput.value, 10);
+        if (initialNote >= 1 && initialNote <= 5) setStars(initialNote);
+
+        starBtns.forEach((btn) => {
+            btn.addEventListener('click', () => setStars(parseInt(btn.dataset.value, 10)));
+            btn.addEventListener('mouseenter', () => {
+                const v = parseInt(btn.dataset.value, 10);
+                starBtns.forEach((b) => {
+                    b.style.color = parseInt(b.dataset.value, 10) <= v ? '#c9a84c' : '#d1d5db';
+                });
+            });
+            btn.addEventListener('mouseleave', () => {
+                const current = parseInt(noteInput.value, 10);
+                setStars(current || 0);
+            });
+        });
+    })();
 </script>
 @endpush
 @endsection
