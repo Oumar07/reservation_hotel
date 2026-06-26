@@ -136,7 +136,7 @@ class BookingController extends Controller
             'statut'       => 'confirme',
         ]);
 
-        return redirect()->route('bookings.my')->with('success', 'Réservation confirmée avec succès !');
+        return redirect()->route('sejour.index')->with('success', 'Réservation confirmée avec succès !');
     }
 
     /**

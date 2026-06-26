@@ -31,6 +31,14 @@ class Hotel extends Model
     }
 
     /**
+     * Un hôtel a plusieurs lieux recommandés.
+     */
+    public function places()
+    {
+        return $this->hasMany(Place::class);
+    }
+
+    /**
      * Calcule la note moyenne de l'hôtel.
      */
     public function averageRating(): float

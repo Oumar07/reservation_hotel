@@ -26,6 +26,7 @@
                 <a href="/hotels" class="nav-link-item">Hôtels</a>
                 <a href="{{ route('bookings.index') }}" class="nav-link-item">Réservations</a>
                 <a href="{{ route('admin.users.index') }}" class="nav-link-item">Utilisateurs</a>
+                <a href="{{ route('places.index') }}" class="nav-link-item">Lieux</a>
                 <a href="/admin" class="nav-link-item is-active">Tableau de bord</a>
             </nav>
 

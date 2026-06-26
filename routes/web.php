@@ -9,6 +9,8 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\SejourController;
 
 // ─── Page d'accueil ──────────────────────────────────────────────────────────
 Route::get('/', [HotelController::class, 'index']);
@@ -24,9 +26,13 @@ Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 Route::middleware('auth')->group(function () {
     Route::get('/rooms/{id}/book', [BookingController::class, 'create'])->name('bookings.create');
     Route::post('/bookings/payment', [BookingController::class, 'payment'])->name('bookings.payment');
+    Route::get('/bookings/payment', fn () => redirect()->route('hotels.index'));
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/mes-reservations', [BookingController::class, 'myBookings'])->name('bookings.my');
     Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
+
+    // ─── Mon séjour (guide du séjour client) ─────────────────────────────────
+    Route::get('/mon-sejour', [SejourController::class, 'index'])->name('sejour.index');
 });
 
 // ─── Avis ────────────────────────────────────────────────────────────────────
@@ -55,6 +61,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('hotels', HotelController::class)->except(['index', 'show']);
     Route::resource('rooms', RoomController::class)->except(['index']);
+});
+
+// ─── Gestion des lieux (admin uniquement) ────────────────────────────────────
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::resource('places', PlaceController::class)->except(['show', 'create']);
 });
 
 // ─── Liste réservations (admin uniquement) ───────────────────────────────────
